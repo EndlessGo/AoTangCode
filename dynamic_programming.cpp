@@ -1,5 +1,5 @@
 //53.Maximum Subarray
-//1. basic thoughts, time complexity O(n)
+//  1. basic thoughts, time complexity O(n)
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
@@ -15,7 +15,7 @@ public:
         return res;
     }
 };
-//2. DP thoughts, time complexity O(n)
+//  2. DP thoughts, time complexity O(n)
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
@@ -30,5 +30,27 @@ public:
             res = max(res, dp[i]);
         }
         return res;
+    }
+};
+
+//322. Coin Change
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, amount+1);
+        //init
+        dp[0] = 0;
+        int size = coins.size();
+        for (int i = 1; i < amount+1; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+            {
+                if (i >= coins[j])
+                {
+                    dp[i] = min(dp[i], dp[i-coins[j]]+1);
+                }
+            }
+        }
+        return dp[amount] != amount+1? dp[amount]:-1;
     }
 };
