@@ -33,26 +33,15 @@ public:
     }
 };
 
-//322. Coin Change
-//  1. DP thoughts, time complexity O(m*n) m = coins.size(), n = amount, space complexity O(n)
+//70. Climbing Stairs
 class Solution {
 public:
-    int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount+1, amount+1);
-        //init
-        dp[0] = 0;
-        int size = coins.size();
-        for (int i = 1; i < amount+1; ++i)
-        {
-            for (int j = 0; j < size; ++j)
-            {
-                if (i >= coins[j])
-                {
-                    dp[i] = min(dp[i], dp[i-coins[j]]+1);
-                }
-            }
-        }
-        return dp[amount] != amount+1? dp[amount]:-1;
+    int climbStairs(int n) {
+        vector<int> dp(n+1, 0);
+        dp[0] = 1, dp[1] = 1;
+        for (int i = 2; i < n+1; ++i)
+            dp[i] = dp[i-1]+dp[i-2];
+        return dp[n];
     }
 };
 
@@ -104,3 +93,27 @@ public:
     return sell;
 }
 };
+
+//322. Coin Change
+//  1. DP thoughts, time complexity O(m*n) m = coins.size(), n = amount, space complexity O(n)
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, amount+1);
+        //init
+        dp[0] = 0;
+        int size = coins.size();
+        for (int i = 1; i < amount+1; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+            {
+                if (i >= coins[j])
+                {
+                    dp[i] = min(dp[i], dp[i-coins[j]]+1);
+                }
+            }
+        }
+        return dp[amount] != amount+1? dp[amount]:-1;
+    }
+};
+
