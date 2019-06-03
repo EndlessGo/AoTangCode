@@ -45,6 +45,25 @@ public:
     }
 };
 
+//120. Triangle
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        //bottom-to-top
+        //two dimensionals thought : dp[i-1][j] = triangle[i][j] + min(triangle[i][j], triangle[i][j+1]);
+        //can be reduced into one dimensional:  dp[j] = triangle[i][j] + min(dp[j], dp[j+1]);
+        vector<int> dp(triangle.back());
+        for (int i = triangle.size() - 2 ; i >= 0; --i)
+        {
+            for(int j = 0; j <= i; ++j)
+            {
+                dp[j] = triangle[i][j] + min(dp[j], dp[j+1]);
+            }
+        }
+        return dp.empty()? 0:dp[0];
+    }
+};
+
 //121. Best Time to Buy and Sell Stock
 //  1. DP thoughts, time complexity O(n), space complexity O(n)
 class Solution {
