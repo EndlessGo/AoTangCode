@@ -33,26 +33,34 @@ public:
     }
 };
 
-//322. Coin Change
-//  1. DP thoughts, time complexity O(m*n) m = coins.size(), n = amount, space complexity O(n)
+//70. Climbing Stairs
 class Solution {
 public:
-    int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount+1, amount+1);
-        //init
-        dp[0] = 0;
-        int size = coins.size();
-        for (int i = 1; i < amount+1; ++i)
+    int climbStairs(int n) {
+        vector<int> dp(n+1, 0);
+        dp[0] = 1, dp[1] = 1;
+        for (int i = 2; i < n+1; ++i)
+            dp[i] = dp[i-1]+dp[i-2];
+        return dp[n];
+    }
+};
+
+//120. Triangle
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        //bottom-to-top
+        //two dimensionals thought : dp[i-1][j] = triangle[i][j] + min(triangle[i][j], triangle[i][j+1]);
+        //can be reduced into one dimensional:  dp[j] = triangle[i][j] + min(dp[j], dp[j+1]);
+        vector<int> dp(triangle.back());
+        for (int i = triangle.size() - 2 ; i >= 0; --i)
         {
-            for (int j = 0; j < size; ++j)
+            for(int j = 0; j <= i; ++j)
             {
-                if (i >= coins[j])
-                {
-                    dp[i] = min(dp[i], dp[i-coins[j]]+1);
-                }
+                dp[j] = triangle[i][j] + min(dp[j], dp[j+1]);
             }
         }
-        return dp[amount] != amount+1? dp[amount]:-1;
+        return dp.empty()? 0:dp[0];
     }
 };
 
@@ -90,4 +98,42 @@ public:
     }
 };
 
-//test
+//309. Best Time to Buy and Sell Stock with Cooldown
+class Solution {
+public:
+    int maxProfit(vector<int> &prices) {
+    int buy(INT_MIN), sell(0), prev_sell(0), prev_buy;
+    for (int price : prices) {
+        prev_buy = buy;
+        buy = max(prev_sell - price, buy);
+        prev_sell = sell;
+        sell = max(prev_buy + price, sell);
+    }
+    return sell;
+}
+};
+
+//322. Coin Change
+//  1. DP thoughts, time complexity O(m*n) m = coins.size(), n = amount, space complexity O(n)
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, amount+1);
+        //init
+        dp[0] = 0;
+        int size = coins.size();
+        for (int i = 1; i < amount+1; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+            {
+                if (i >= coins[j])
+                {
+                    dp[i] = min(dp[i], dp[i-coins[j]]+1);
+                }
+            }
+        }
+        return dp[amount] != amount+1? dp[amount]:-1;
+    }
+};
+
+//test no input password
