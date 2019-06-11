@@ -42,6 +42,116 @@ public:
     }
 };
 
+//2. Add Two Numbers
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+//	1. convert thought but wrong!
+class Solution {
+public:
+    //链表转成整形相加，然后再将和转成链表，这样的问题：int溢出！而直接用链表操作就不会出现
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        return Number2List(List2Number(l1) + List2Number(l2));
+    }
+    int List2Number(ListNode* l)
+    {
+        int num = 0, exp = 0;
+        while(l)
+        {
+            num += l->val * pow(10,exp++);
+            l = l->next;
+        }
+        return num;
+    }
+    ListNode* Number2List(int num)
+    {
+        ListNode* dummy = new ListNode(0), * node = dummy;
+        while(num)
+        {
+            ListNode* tmp = new ListNode(num%10);
+            node->next = tmp;
+            node = tmp;
+            num /= 10;
+        }
+        return dummy->next;
+    }
+};
+
+//55. Jump Game
+//	1. Backtracking but TLE, time complexity too high O(2^n), space O(n)
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        return canJumpFromPosition(nums, 0);
+    }
+    bool canJumpFromPosition(vector<int>& nums, int pos)
+    {
+        int end_index = nums.size()-1;
+        if (pos == end_index) return true;
+        int furthest = min(pos+nums[pos], end_index);
+        for (int next_pos = furthest; next_pos >= pos + 1; --next_pos)
+        {
+            if (canJumpFromPosition(nums, next_pos))
+                return true;
+        }
+        return false;
+    }
+};
+
+//	2. DP thought but TLE, time complexity too high O(n^2), space O(n)
+class Solution {
+public:
+    enum 
+    {
+        GOOD,
+        BAD,
+        UNKNOWN,
+    };
+    vector<int> memo;
+    bool canJump(vector<int>& nums) {
+        memo.resize(nums.size(), UNKNOWN);
+        memo[nums.size()-1] = GOOD;
+        return canJumpFromPosition(nums, 0);
+    }
+    bool canJumpFromPosition(vector<int>& nums, int pos)
+    {
+        if (memo[pos] != UNKNOWN)
+        {
+            return memo[pos] == GOOD? true : false;
+        }
+        int furthest = min(pos+nums[pos], (int)nums.size()-1);
+        for (int next_pos = pos + 1; next_pos <= furthest; ++next_pos)
+        {
+            if (canJumpFromPosition(nums, next_pos))
+            {
+                memo[pos] = GOOD;
+                return true;
+            }
+        }
+        memo[pos] = BAD;
+        return false;
+    }
+};
+
+//	3.Greedy thought, O(n) time and O(n) space, AC!
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int last = nums.size()-1;
+        for (int i = last; i >= 0; --i)
+        {
+            if (i+nums[i] >= last)
+                last = i;        
+        }
+        return last == 0;
+    }
+};
+
 //326. Power of Three
 //	1. loop thought
 class Solution {
