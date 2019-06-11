@@ -82,6 +82,32 @@ public:
     }
 };
 
+//	2.simplified list operation use dummy head, AC!
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(0);
+        ListNode* cur = dummy;
+        int carry = 0;
+        while(l1 || l2)
+        {
+            int x = l1 ? l1->val : 0;
+            int y = l2 ? l2->val : 0;
+            int sum = x + y + carry;
+            carry = sum / 10;
+            cur->next = new ListNode(sum%10);
+            cur = cur->next;
+            if (l1) l1 = l1->next;
+            if (l2) l2 = l2->next;
+        }
+        if (carry)
+        {
+            cur->next = new ListNode(carry);
+        }
+        return dummy->next;
+    }
+};
+
 //55. Jump Game
 //	1. Backtracking but TLE, time complexity too high O(2^n), space O(n)
 class Solution {
@@ -149,6 +175,48 @@ public:
                 last = i;        
         }
         return last == 0;
+    }
+};
+
+//15. 3Sum
+//	1.Discuss solution use two pointers and sort unique, AC!
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int> > res;
+        std::sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < nums.size(); i++) {
+            int target = -nums[i];
+            int front = i + 1;
+            int back = nums.size() - 1;
+
+            while (front < back) {
+                int sum = nums[front] + nums[back];
+                // Finding answer which start from number num[i]
+                if (sum < target)
+                    front++;
+                else if (sum > target)
+                    back--;
+                else {
+                    vector<int> triplet(3, 0);
+                    triplet[0] = nums[i];
+                    triplet[1] = nums[front];
+                    triplet[2] = nums[back];
+                    res.push_back(triplet);
+                    // Processing duplicates of Number 2
+                    // Rolling the front pointer to the next different number forwards
+                    while (front < back && nums[front] == triplet[1]) front++;
+                    // Processing duplicates of Number 3
+                    // Rolling the back pointer to the next different number backwards
+                    while (front < back && nums[back] == triplet[2]) back--;
+                }
+            }
+            // Processing duplicates of Number 1
+            while (i + 1 < nums.size() && nums[i + 1] == nums[i])
+                i++;
+        }
+        return res;
     }
 };
 
