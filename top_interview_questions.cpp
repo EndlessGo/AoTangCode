@@ -7,9 +7,9 @@ easy:
 
 medium:
 1. https://leetcode.com/problems/add-two-numbers/
-2. https://leetcode.com/problems/3sum/  
-3. https://leetcode.com/problems/jump-game/
-4. https://leetcode.com/problems/word-break/
+2. https://leetcode.com/problems/3sum/  		Redo
+3. https://leetcode.com/problems/jump-game/		Redo
+4. https://leetcode.com/problems/word-break/		Redo
 5. https://leetcode.com/problems/sort-list/
 
 hard:
@@ -217,6 +217,34 @@ public:
                 i++;
         }
         return res;
+    }
+};
+
+//139. Word Break
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> Dict(wordDict.begin(), wordDict.end());
+        return wordBreak(s, Dict);
+    }
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        int size = s.size();
+        //dp[i] means can find word sequence from wordDict end in index i
+        vector<bool> dp(size+1, false);
+        dp[0] = true;
+        for(int i = 1; i <= size; ++i)
+        {
+            for(int j = 0; j < i; ++j)
+            {
+                //notice that c++ string.substr(start_index, length)
+                if (dp[j] && wordDict.end() != wordDict.find(s.substr(j, i-j)))
+                {
+                        dp[i] = true;
+                        break;
+                }
+            }
+        }
+        return dp[size];
     }
 };
 
