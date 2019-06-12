@@ -10,7 +10,7 @@ medium:
 2. https://leetcode.com/problems/3sum/  		Redo
 3. https://leetcode.com/problems/jump-game/		Redo
 4. https://leetcode.com/problems/word-break/		Redo
-5. https://leetcode.com/problems/sort-list/
+5. https://leetcode.com/problems/sort-list/		Redo
 
 hard:
 1. https://leetcode.com/problems/median-of-two-sorted-arrays/
@@ -247,6 +247,73 @@ public:
         return dp[size];
     }
 };
+
+//148. Sort List
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        //i can do O(n^2) like selection sort or bubble sort, how to reduce to O(n log n)? --> merge sort!
+        if (!head || !head->next)   return head;
+        ListNode* second = partion(head);
+        head = sortList(head);
+        second = sortList(second);
+        return merge(head, second);
+    }
+private:
+    ListNode* partion(ListNode *head)
+    {
+        //partion list into two part use fast-slow pointers
+        if (!head || !head->next)   return head;
+        ListNode* fast = head->next, * slow = head;
+        while (fast)
+        {
+            fast = fast->next;
+            if (fast)
+            {
+                fast = fast->next;
+                slow = slow->next;
+            }
+        }
+        ListNode* second = slow->next;
+        slow->next = NULL;
+        return second;
+    }
+    ListNode* merge(ListNode* l1, ListNode* l2)
+    {
+        //merge two sorted list with l1 and l2 node, no new ListNode!
+        if (!l1)    return l2;
+        if (!l2)    return l1;
+        ListNode* head = l1;
+        if (l1->val > l2->val)
+        {
+            head = l2;
+            l2 = l1;
+            l1 = head;
+        }
+        while (l1->next)
+        {
+            if (l1->next->val > l2->val)
+            {
+                ListNode* temp = l2;
+                l2 = l1->next;
+                l1->next = temp;
+            }
+            l1 = l1->next;
+        }
+        l1->next = l2;
+        return head;
+    }
+};
+//can simplified see https://leetcode.com/problems/sort-list/discuss/46714/Java-merge-sort-solution
+
 
 //326. Power of Three
 //	1. loop thought
