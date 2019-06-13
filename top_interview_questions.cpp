@@ -107,6 +107,57 @@ public:
         return dummy->next;
     }
 };
+//41. First Missing Positive
+//	1. My thought,time complexity O(n), but space O(n)!
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        // nums.size() can save size count integers [1,2,...,size, size+1] names record, so can direct find nums[i] in record
+        int size = nums.size();
+        if (!size) return 1;
+        unordered_map<int, bool> record;
+        for (int i = 1; i <= size+1; ++i)
+        {
+            //O(n) time but O(n) space!!!
+            record.insert(pair<int,bool>(i,false));
+        }
+        for (auto num : nums)
+        {
+            auto it = record.find(num), eit = record.end();
+            if ( it != eit && it->second == false)
+            {
+                it->second = true;
+            }
+        }
+        int small = INT_MAX;
+        for (auto it = record.begin(), eit = record.end(); it != eit; ++it)
+        {
+            if (it->second == false)
+                small = min(small , it->first);
+        }
+        return small;
+    }
+};
+//	2. Wonderfull thought,time complexity O(n) and space O(1)!
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        for (int i = 0; i < n; ++i)
+        {
+            while (nums[i] > 0 && nums[i] <= n && nums[i] != nums[nums[i]-1])
+                swap(nums[i], nums[nums[i]-1]);
+        }
+        for (int i = 0; i < n; ++i)
+        {
+            if (nums[i] != i+1)
+            {
+                return i+1;
+            }
+        }
+        return n+1;
+    }
+};
 
 //55. Jump Game
 //	1. Backtracking but TLE, time complexity too high O(2^n), space O(n)
