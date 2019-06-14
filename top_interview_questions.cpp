@@ -14,8 +14,8 @@ medium:
 
 hard:
 1. https://leetcode.com/problems/median-of-two-sorted-arrays/
-2. https://leetcode.com/problems/first-missing-positive/
-3. https://leetcode.com/problems/trapping-rain-water/
+2. https://leetcode.com/problems/first-missing-positive/	Redo
+3. https://leetcode.com/problems/trapping-rain-water/		Redo
 
 ## 题解
 //1. Two Sum
@@ -156,6 +156,29 @@ public:
             }
         }
         return n+1;
+    }
+};
+
+//42. Trapping Rain Water
+//	1. Solution DP thought, O(n) time and O(n) space!
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size = height.size();
+        if (!size) return 0;
+        int ans = 0;
+        //left_max[i] mean the heightest from left, as left_max[0] to left_max[i]
+        vector<int> left_max(size,0);
+        vector<int> right_max(size,0);
+        left_max[0] = height[0];
+        for (int i = 1; i < size; ++i)
+            left_max[i] = max(height[i], left_max[i-1]);
+        right_max[size-1] = height[size-1];
+        for (int i = size-2; i >= 0 ; --i)
+            right_max[i] = max(height[i], right_max[i+1]);
+        for (int i = 0; i < size; ++i)
+            ans += min(left_max[i], right_max[i]) - height[i];//key algorithm
+        return ans;
     }
 };
 
