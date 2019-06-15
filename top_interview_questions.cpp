@@ -13,7 +13,7 @@ medium:
 5. https://leetcode.com/problems/sort-list/		Redo
 
 hard:
-1. https://leetcode.com/problems/median-of-two-sorted-arrays/
+1. https://leetcode.com/problems/median-of-two-sorted-arrays/	Redo
 2. https://leetcode.com/problems/first-missing-positive/	Redo
 3. https://leetcode.com/problems/trapping-rain-water/		Redo
 
@@ -107,6 +107,44 @@ public:
         return dummy->next;
     }
 };
+
+//4. Median of Two Sorted Arrays
+//	1. 
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size();
+        int n = nums2.size();
+        int l = (m + n + 1) >> 1;
+        int r = (m + n + 2) >> 1;
+        return ( getkth(nums1, m ,nums2, n, l) + getkth(nums1, m ,nums2, n, r) ) / 2.0;
+    }
+    int getkth(vector<int>& nums1, int m, vector<int>& nums2, int n, int k){
+        // let m <= n
+        if (m > n) 
+            return getkth(nums2, n, nums1, m, k);
+        if (m == 0)
+            return nums2[k - 1];
+        if (k == 1)
+            return min(nums1[0], nums2[0]);
+
+        int i = min(m, k / 2), j = min(n, k / 2);
+        if (nums1[i - 1] > nums2[j - 1]){
+            vector<int> vec(nums2.begin() + j,nums2.end());
+            return getkth(nums1, m, vec, n - j, k - j);
+        }
+            
+        else{
+            vector<int> vec(nums1.begin() + i,nums1.end());
+            return getkth( vec, m - i, nums2, n, k - i);
+        }
+            
+        return 0;
+    }
+};
+
+//	2.Binary Search, log(min(m,n)) video https://www.youtube.com/watch?v=LPFhl65R7ww
+
 //41. First Missing Positive
 //	1. My thought,time complexity O(n), but space O(n)!
 class Solution {
