@@ -498,3 +498,80 @@ public:
         return fmod(log10(n)/log10(3), 1)==0;
     }
 };
+
+## 2019.6.17-2019.6.23  
+### Tree专题  
+MEDIUM
+https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
+https://leetcode.com/problems/path-sum/
+https://leetcode.com/problems/path-sum-ii/
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+HARD
+https://leetcode.com/problems/recover-binary-search-tree/
+
+### 动态规划专题  
+EASY
+https://leetcode.com/problems/climbing-stairs/
+MEDIUM
+https://leetcode.com/problems/unique-paths/
+https://leetcode.com/problems/longest-palindromic-substring/
+
+### 二进制专题  
+easy:  
+1. www.lintcode.com/zh-cn/problem/count-1-in-binary  
+2. www.lintcode.com/zh-cn/problem/add-binary  
+
+//lintcode 365. Count 1 in Binary
+//1. Integer is n bits with m 1 bits, time complexity O(m)
+class Solution {
+public:
+    /*
+     * @param num: An integer
+     * @return: An integer
+     */
+    int countOnes(int num) {
+        // write your code here
+        int count = 0;
+        while (num)
+        {
+            num &= (num-1);
+            ++count;
+        }
+        return count;        
+    }
+};
+
+//lintcode 408. Add Binary
+//1. Notice that string low bit in the right! Time complexity O(max(m,n))
+class Solution {
+public:
+    /**
+     * @param a: a number
+     * @param b: a number
+     * @return: the result
+     */
+    string addBinary(string &a, string &b) {
+        // write your code here
+        int alen = a.size(), blen = b.size();
+        if (!alen) return b;
+        if (!blen) return a;
+        int size = max(alen,blen);
+        string res(size,'0');
+        int carry = 0;
+        //string right are low bit!
+        for (int i = 1; i <= alen || i <= blen; ++i)
+        {
+            int sum = 0;
+            if (i > alen)
+                sum = b[blen-i] - '0' + carry;
+            else if (i > blen)
+                sum = a[alen-i] - '0' + carry;
+            else
+                sum = a[alen-i] - '0' + b[blen-i] - '0' + carry;
+            cout<<"i="<<i<<" "<<"sum="<<sum<<endl;
+            res[size-i] = sum % 2 + '0';
+            carry = sum / 2;
+        }
+        return carry == 1 ? '1'+res : res;
+    }
+};
