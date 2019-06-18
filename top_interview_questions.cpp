@@ -510,11 +510,53 @@ HARD
 https://leetcode.com/problems/recover-binary-search-tree/
 
 ### 动态规划专题  
-EASY
-https://leetcode.com/problems/climbing-stairs/
-MEDIUM
-https://leetcode.com/problems/unique-paths/
-https://leetcode.com/problems/longest-palindromic-substring/
+easy:  
+1. https://leetcode.com/problems/climbing-stairs/  see dynamic_programming.cpp 70. Climbing Stairs
+medium:  
+1. https://leetcode.com/problems/unique-paths/
+2. https://leetcode.com/problems/longest-palindromic-substring/
+
+//62. Unique Paths
+//	1. time O(mn), space O(mn)
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+        //grid[i][j] = grid[i-1][j] + grid[i][j-1]
+        //init grid[0][0~m-1] = 1 and grid[0~n-1][0] = 1
+        vector<vector<int>> grid(n, vector<int>(m,0));
+        for (int i = 0; i < m; ++i)
+            grid[0][i] = 1;
+        for (int i = 1; i < n; ++i)
+            grid[i][0] = 1;
+        for (int i = 1; i < n; ++i)
+        {
+            for (int j = 1; j < m; ++j)
+            {
+                grid[i][j] = grid[i-1][j] + grid[i][j-1];
+            }
+        }
+        return grid[n-1][m-1];
+    }
+};
+
+//	2. O(mn) time and O(min(m,n)) space
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+        if (m > n) return uniquePaths(n,m);// ensure m <= n
+        //grid[i] = grid[i-1] + grid[i]
+        vector<int> grid(m,0);
+        grid[0] = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 1; j < m; ++j)
+                grid[j] += grid[j-1];
+        }
+        return grid[m-1];
+    }
+};
 
 ### 二进制专题  
 easy:  
