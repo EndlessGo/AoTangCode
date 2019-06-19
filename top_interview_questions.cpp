@@ -558,6 +558,51 @@ public:
     }
 };
 
+//5. Longest Palindromic Substring
+//	1.O(n^3), out time limit
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //dp[i] means longest palindromic substring's length in s[0]..s[i-1]
+        //dp[i] = max( dp[i-1], len(string that contain s[i-1]) ), so we can find from s[i-1] to s[0]
+        string res;
+        int size = s.size();
+        for (int i = 0; i < size; ++i)
+        {
+            for (int j = 0; j <= i; ++j)// worst case need O(1^2+2^2+n^2)->o(n^3)
+            {
+                int temp_size = i-j+1;
+                if (res.size() >= temp_size)//after no need to check palindrome
+                    break;
+                string temp = s.substr(j,temp_size);
+                //cout<<"i="<<i<<" j="<<j<<" temp="<<temp<<endl;
+                if (isPalindrome(temp))
+                {
+                    if ( res.size() < temp_size)
+                    {
+                        res = temp;
+                        //cout<<"i="<<i<<" j="<<j<<" res="<<temp<<endl;
+                    }
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    bool isPalindrome(string s)
+    {
+        int size = s.size();
+        for (int i = 0; i <= (size - 1) / 2; ++i)
+        {
+            if (s[i] != s[size-1-i])
+                return false;
+        }
+        return true;
+    }
+};
+
+//	2.//dp[i][j] = P[i+1][j-1] && (s[i]==s[j]), dp[i][j] = true means from s[i] to s[j] is palindrome
+
 ### 二进制专题  
 easy:  
 1. www.lintcode.com/zh-cn/problem/count-1-in-binary  
