@@ -601,6 +601,46 @@ public:
     }
 };
 
+//	2.Direct DP, O(n^2)
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        //dp[i][j] = P[i+1][j-1] && (s[i]==s[j]), dp[i][j] = true means from s[i] to s[j] is palindrome
+        int size = s.size();
+        vector<vector<bool>> dp(size, vector<bool>(size, false));
+        string res;
+        if (!size) return res;
+        //init
+        for (int i = 0; i < size; ++i)
+        {
+            dp[i][i] = true;
+            if (i == size - 1) break;
+            dp[i][i+1] = (s[i] == s[i+1]);
+        }
+        //dp
+        for (int i = size-3; i >= 0; --i)
+        {
+            for (int j = i + 2; j < size; ++j)
+            //    cout<<"dp["<<i<<"]["<<j<<"]"<<dp[i][j]<<endl;
+                dp[i][j] = (dp[i+1][j-1] && s[i]==s[j]);
+        }
+        //get max, need to contain init case!
+        int start = 0, len = 1;
+        for (int i = 0; i < size; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+            {
+                if (dp[i][j] && len < j-i+1)
+                {
+                    start = i;
+                    len = j-i+1;
+                }
+            }
+        }
+        return s.substr(start,len);
+    }
+};
+
 //	2.//dp[i][j] = P[i+1][j-1] && (s[i]==s[j]), dp[i][j] = true means from s[i] to s[j] is palindrome
 
 ### 二进制专题  
