@@ -509,12 +509,39 @@ https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 HARD
 https://leetcode.com/problems/recover-binary-search-tree/
 
+//112. Path Sum
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(!root)
+            return false;
+        cout<<"sum="<<sum<<" "<<"valu="<<root->val<<endl;
+        if (!root->left && !root->right)//leaf node
+            if(sum-root->val == 0) return true;
+        bool left = false, right = false;
+        if (root->left)
+            left = hasPathSum(root->left, sum-root->val);
+        if (root->right)
+            right = hasPathSum(root->right, sum-root->val);
+        return  left || right;
+    }
+};
+
 ### 动态规划专题  
 easy:  
 1. https://leetcode.com/problems/climbing-stairs/  see dynamic_programming.cpp 70. Climbing Stairs
 medium:  
 1. https://leetcode.com/problems/unique-paths/
-2. https://leetcode.com/problems/longest-palindromic-substring/
+2. https://leetcode.com/problems/longest-palindromic-substring/		Can optimize	
 
 //62. Unique Paths
 //	1. time O(mn), space O(mn)
