@@ -504,8 +504,8 @@ public:
 MEDIUM
 https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 https://leetcode.com/problems/path-sum/
-https://leetcode.com/problems/path-sum-ii/
-https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+https://leetcode.com/problems/path-sum-ii/					Optimize code
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/		Optimize code
 HARD
 https://leetcode.com/problems/recover-binary-search-tree/
 
@@ -630,7 +630,7 @@ easy:
 1. https://leetcode.com/problems/climbing-stairs/  see dynamic_programming.cpp 70. Climbing Stairs
 medium:  
 1. https://leetcode.com/problems/unique-paths/
-2. https://leetcode.com/problems/longest-palindromic-substring/		Can optimize	
+2. https://leetcode.com/problems/longest-palindromic-substring/		Optimize time
 
 //62. Unique Paths
 //	1. time O(mn), space O(mn)
