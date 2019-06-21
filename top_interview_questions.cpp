@@ -524,7 +524,7 @@ public:
     bool hasPathSum(TreeNode* root, int sum) {
         if(!root)
             return false;
-        cout<<"sum="<<sum<<" "<<"valu="<<root->val<<endl;
+        //cout<<"sum="<<sum<<" "<<"value="<<root->val<<endl;
         if (!root->left && !root->right)//leaf node
             if(sum-root->val == 0) return true;
         bool left = false, right = false;
@@ -534,6 +534,52 @@ public:
             right = hasPathSum(root->right, sum-root->val);
         return  left || right;
     }
+};
+
+//113. Path Sum II
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<int> path;
+        findPathSum(root, sum, path);
+        return res;
+    }
+    void findPathSum(TreeNode* root, int sum, vector<int>& path) {
+        if(!root)
+            return;
+        //cout<<"sum="<<sum<<" "<<"valu="<<root->val<<endl;
+        path.push_back(root->val);
+        if (!root->left && !root->right)//leaf node
+        {
+            if(sum-root->val == 0) 
+            {                
+                res.push_back(path);
+                return;
+            }
+        }        
+        if (root->left)
+        {
+            findPathSum(root->left, sum-root->val, path);
+            path.pop_back();
+        }
+        if (root->right)
+        {
+            findPathSum(root->right, sum-root->val, path);
+            path.pop_back();
+        }
+        return;
+    }
+private:
+    vector<vector<int>> res;
 };
 
 ### 动态规划专题  
