@@ -582,6 +582,49 @@ private:
     vector<vector<int>> res;
 };
 
+//103. Binary Tree Zigzag Level Order Traversal
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
+        queue<TreeNode*> que;
+        bool odd = true;
+        que.push(root);
+        while (!que.empty())
+        {
+            int level_size = que.size();
+            vector<int> level;
+            for (int i = 1; i <= level_size; ++i)
+            {
+                TreeNode* node = que.front();
+                level.push_back(node->val);
+                que.pop();
+                if (node->left)
+                    que.push(node->left);
+                if (node->right)
+                    que.push(node->right);
+            }
+            if (!odd)
+            {
+                reverse(level.begin(),level.end());
+            }
+            odd = !odd;
+            res.push_back(level);
+        }
+        return res;
+    }
+};
+
 ### 动态规划专题  
 easy:  
 1. https://leetcode.com/problems/climbing-stairs/  see dynamic_programming.cpp 70. Climbing Stairs
