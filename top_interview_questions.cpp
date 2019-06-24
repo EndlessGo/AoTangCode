@@ -818,3 +818,89 @@ public:
         return carry == 1 ? '1'+res : res;
     }
 };
+
+# 题目摘要  
+## 2019.6.24-2019.6.30  
+###链表专题  
+easy:
+1. https://leetcode.com/problems/linked-list-cycle/
+medium:
+1. https://leetcode.com/problems/linked-list-cycle-ii/
+2. https://leetcode.com/problems/rotate-list/
+
+###二分查找
+medium:
+1. https://leetcode.com/problems/search-in-rotated-sorted-array/	
+2. https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+3. https://leetcode.com/problems/search-a-2d-matrix/
+
+###搜索专题
+medium:
+1. https://leetcode.com/problems/pacific-atlantic-water-flow/
+2. https://leetcode.com/problems/decode-string/
+hard:
+1. https://leetcode.com/problems/24-game/
+2. https://leetcode.com/problems/recover-binary-search-tree/
+
+//141. Linked List Cycle
+//	1. If cycle, absolute fast can chase slow because the worst case fast = 2*slow can meet at the end
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode* dummyHead = new ListNode(-1);
+        dummyHead->next = head;
+        ListNode* fast, *slow;
+        fast = slow = dummyHead;
+        while (fast && fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
+                return true;
+        }
+        return false;
+    }
+};
+
+//142. Linked List Cycle II
+//	1.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (head == NULL || head->next == NULL)
+            return NULL;
+
+        ListNode *slow  = head;
+        ListNode *fast  = head;
+        ListNode *entry = head;
+
+        while (fast->next && fast->next->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {                      // there is a cycle
+                while(slow != entry) {               // found the entry location
+                    slow  = slow->next;
+                    entry = entry->next;
+                }
+                return entry;
+            }
+        }
+        return NULL;                                 // there has no cycle
+    }
+};
