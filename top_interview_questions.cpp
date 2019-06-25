@@ -871,7 +871,7 @@ public:
 };
 
 //142. Linked List Cycle II
-//	1.
+//	1. My, use dummyHead
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -880,6 +880,32 @@ public:
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* dummyHead = new ListNode(-1);
+        dummyHead->next = head;
+        ListNode* fast, *slow;
+        fast = slow = dummyHead;
+        while (fast && fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
+                break;
+        }
+        if (!fast || !fast->next)//no cycle
+            return NULL;
+        slow = dummyHead;
+        while (slow != fast)
+        {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        return slow;
+    }
+};
+//	2. Others
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
