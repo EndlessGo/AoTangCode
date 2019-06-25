@@ -945,6 +945,8 @@ public:
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
+	//left part[1,size-k], right part[size-k+1,size]:  (size-k)th node -> NULL, (size-k+1)th node -> 1th node and return head node
+	//compute list size, then k = k % size
         if (!head||!head->next) return head;
         ListNode* node = head, * tail = NULL;
         int size = 0;
@@ -974,5 +976,32 @@ public:
             tail->next = head;
         }        
         return newHead;
+    }
+};
+
+//	2.Other Solution, logic is same but code more cleaner
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(!head) return head;
+        
+        int len=1; // number of nodes
+        ListNode *newH, *tail;
+        newH=tail=head;
+        
+        while(tail->next)  // get the number of nodes in the list
+        {
+            tail = tail->next;
+            len++;
+        }
+        tail->next = head; // circle the link
+
+        if(k %= len) 
+        {
+            for(auto i=0; i<len-k; i++) tail = tail->next; // the tail node is the (len-k)-th node (1st node is head)
+        }
+        newH = tail->next; 
+        tail->next = NULL;
+        return newH;
     }
 };
