@@ -905,6 +905,7 @@ public:
         return slow;
     }
 };
+
 //	2. Others
 class Solution {
 public:
@@ -928,5 +929,50 @@ public:
             }
         }
         return NULL;                                 // there has no cycle
+    }
+};
+
+//61. Rotate List
+//	1. My solution
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head||!head->next) return head;
+        ListNode* node = head, * tail = NULL;
+        int size = 0;
+        while (node)
+        {
+            ++size;
+            if (!node->next)//find tail node
+                tail = node;
+            node = node->next;
+        }
+        k = k % size;
+        int new_end = size-k;
+        node = head;
+        while (new_end - 1 > 0)
+        {
+            --new_end;
+            node = node->next;
+        }
+        ListNode* newHead = node->next;
+        if (!newHead)//right part are null
+        {
+            newHead = head;
+        }
+        else
+        {
+            node->next = NULL;
+            tail->next = head;
+        }        
+        return newHead;
     }
 };
