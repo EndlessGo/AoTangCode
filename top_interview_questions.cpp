@@ -837,9 +837,9 @@ medium:
 ###搜索专题
 medium:
 1. https://leetcode.com/problems/pacific-atlantic-water-flow/
-2. https://leetcode.com/problems/decode-string/
+2. https://leetcode.com/problems/decode-string/				Optimize code and time
 hard:
-1. https://leetcode.com/problems/24-game/
+1. https://leetcode.com/problems/24-game/				Redo
 2. https://leetcode.com/problems/recover-binary-search-tree/
 
 //141. Linked List Cycle
@@ -1005,3 +1005,144 @@ public:
         return newH;
     }
 };
+
+
+//394. Decode String
+//	1. My solution, need to optimize
+class Solution {
+public:
+    string decodeString(string s) {
+        //push char into stack, when meet ']' stack pop until '[' and repeated times 'number' before '['
+        if (s.empty()) return s;
+        stack<char> stk;
+        int size = s.size();
+        for (int i = 0; i < size; ++i)
+        {
+            cout<<"s["<<i<<"]="<<s[i]<<endl;
+            if (s[i] == ']')
+            {
+                string out;
+                while (stk.top() != '[')
+                {
+                    out = stk.top() + out;
+                    stk.pop();
+                }
+                stk.pop();//pop '['
+                //k is guaranteed to be a positive integer.
+                int k, count;
+                k = count = 0;
+                while (!stk.empty() && stk.top() >= '0' && stk.top() <= '9')
+                {
+                    int digit = stk.top() - '0';
+                    k += pow(10,count)*digit;
+                    stk.pop();
+                    count++;
+                }
+                cout<<"k="<<k<<endl;
+                //repeated k times
+                string in = out;
+                for (int i = 1; i < k; ++i)
+                    out += in;
+                int size_out = out.size();
+                cout<<"out="<<out<<endl;
+                for (int i = 0; i < size_out; ++i)
+                    stk.push(out[i]);
+            }
+            else
+                stk.push(s[i]);            
+        }
+        string res;        
+        size = stk.size();
+        for (int i = 0; i < size; ++i)
+        {
+            res = stk.top() + res;
+            stk.pop();
+        }
+        return res;
+    }
+};
+
+//679. 24 Game
+//	1. C++
+class Solution {
+public:
+    bool judgePoint24(vector<int>& nums) {
+        vector<double> arr(nums.begin(), nums.end());
+        
+        return Recursion(arr);
+        
+    } 
+
+    bool Recursion(vector<double>& nums) {
+      if(nums.size() == 1) { 
+         if(abs(nums[0] - 24) < 0.001) {
+            return true;
+         }
+         return false;
+      }
+      for(int i = 0; i < nums.size(); i++) {
+        for(int j = i + 1; j < nums.size(); j++) {
+          double p = nums[i], q = nums[j];
+          vector<double> ops{p + q, p - q, q - p, p * q};
+          if(p > 0.001) ops.push_back(q / p);
+          if(q > 0.001) ops.push_back(p / q);
+
+          
+          nums.erase(nums.begin() + j);
+          nums.erase(nums.begin() + i);
+
+          for(auto op : ops) {
+            nums.push_back(op);
+            if(Recursion(nums)) {
+                return true;
+            };
+            nums.pop_back();
+          }
+
+          nums.insert(nums.begin() + i, p);
+          nums.insert(nums.begin() + j, q);
+        }
+      }
+        return false;
+    }
+};
+
+//	2. Java
+class Solution {
+    public boolean judgePoint24(int[] nums) {
+        ArrayList A = new ArrayList<Double>();
+        for (int v: nums) A.add((double) v);
+        return solve(A);
+    }
+    private boolean solve(ArrayList<Double> nums) {
+        if (nums.size() == 0) return false;
+        if (nums.size() == 1) return Math.abs(nums.get(0) - 24) < 1e-6;
+
+        for (int i = 0; i < nums.size(); i++) {
+            for (int j = 0; j < nums.size(); j++) {
+                if (i != j) {
+                    ArrayList<Double> nums2 = new ArrayList<Double>();
+                    for (int k = 0; k < nums.size(); k++) if (k != i && k != j) {
+                        nums2.add(nums.get(k));
+                    }
+                    for (int k = 0; k < 4; k++) {
+                        if (k < 2 && j > i) continue;
+                        if (k == 0) nums2.add(nums.get(i) + nums.get(j));
+                        if (k == 1) nums2.add(nums.get(i) * nums.get(j));
+                        if (k == 2) nums2.add(nums.get(i) - nums.get(j));
+                        if (k == 3) {
+                            if (nums.get(j) != 0) {
+                                nums2.add(nums.get(i) / nums.get(j));
+                            } else {
+                                continue;
+                            }
+                        }
+                        if (solve(nums2)) return true;
+                        nums2.remove(nums2.size() - 1);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
