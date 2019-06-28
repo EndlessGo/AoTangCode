@@ -1042,6 +1042,79 @@ public:
     }
 };
 
+//	2.Change, another thought!
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if (nums.empty()) return -1;
+        int size = nums.size();
+        return search(nums, 0, size-1, target);
+    }
+    //find target in nums[l...r]
+    int search(vector<int>& nums, int l, int r, int target){
+        if (l > r)  return -1;
+        if (l == r)
+        {
+            if (target == nums[l])
+                return l;
+            return -1;
+        }
+        int mid = l + (r-l)/2;
+        if (nums[mid] == target)
+            return mid;
+        else if (nums[mid] > nums[r])
+        {
+            if (nums[mid] > target && nums[l] <= target)
+                return search(nums, l, mid-1, target);
+            return search(nums, mid+1, r, target);
+        }
+        else//nums[mid] < nums[r]
+        {
+            if (nums[mid] < target && nums[r] >= target)
+                return search(nums, mid+1, r, target);
+            return search(nums, l, mid-1, target);
+        }
+    }
+};
+
+//81. Search in Rotated Sorted Array II
+//	1.Other solution, worst case O(n), average O(logn)
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        if (nums.empty()) return false;
+        int size = nums.size();
+        return search(nums, 0, size-1, target);
+    }
+    //find target in nums[l...r]
+    int search(vector<int>& nums, int l, int r, int target){
+        if (l > r)  return false;
+        if (l == r)
+        {
+            if (target == nums[l])
+                return true;
+            return false;
+        }
+        int mid = l + (r-l)/2;
+        if (nums[mid] == target)
+            return true;
+        else if (nums[mid] < nums[r])
+        {
+            if (nums[mid] < target && nums[r] >= target)
+                return search(nums, mid+1, r, target);
+            return search(nums, l, mid-1, target);
+        }
+        else if (nums[mid] > nums[r])
+        {
+            if (nums[mid] > target && nums[l] <= target)
+                return search(nums, l, mid-1, target);
+            return search(nums, mid+1, r, target);
+        }
+        else//nums[mid] == nums[r]
+            return search(nums, l, r-1, target);
+    }
+};
+
 //394. Decode String
 //	1. My solution, need to optimize
 class Solution {
