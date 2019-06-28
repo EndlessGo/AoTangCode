@@ -836,7 +836,7 @@ medium:
 
 ###搜索专题
 medium:
-1. https://leetcode.com/problems/pacific-atlantic-water-flow/
+1. https://leetcode.com/problems/pacific-atlantic-water-flow/		Not understand!
 2. https://leetcode.com/problems/decode-string/				Optimize code and time
 hard:
 1. https://leetcode.com/problems/24-game/				Redo
@@ -1006,6 +1006,41 @@ public:
     }
 };
 
+//33. Search in Rotated Sorted Array
+//	1.My Solution
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if (nums.empty()) return -1;
+        int size = nums.size();
+        return search(nums, 0, size-1, target);
+    }
+    //find target in nums[l...r]
+    int search(vector<int>& nums, int l, int r, int target){
+        if (l > r)  return -1;
+        if (l == r)
+        {
+            if (target == nums[l])
+                return l;
+            return -1;
+        }
+        int mid = l + (r-l)/2;
+        if (nums[mid] == target)
+            return mid;
+        else if (nums[mid] > target)
+        {
+            if ( (nums[l] < nums[mid] && nums[l] <= target) || nums[l] > nums[mid])//consider two case!
+                return search(nums, l, mid-1, target);
+            return search(nums, mid+1, r, target);
+        }
+        else//nums[mid] < target
+        {
+            if ((nums[r] > nums[mid] && nums[r] >= target) || nums[r] < nums[mid])
+                return search(nums, mid+1, r, target);
+            return search(nums, l, mid-1, target);
+        }
+    }
+};
 
 //394. Decode String
 //	1. My solution, need to optimize
