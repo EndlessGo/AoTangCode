@@ -45,3 +45,92 @@ public:
     }
 };
 
+2.
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead)
+    {
+		if (!pHead || !pHead->next)	return NULL;
+		ListNode dummy(-1);
+		dummy.next = pHead;
+		ListNode* slow = &dummy, * fast = &dummy;
+		while (fast->next && fast->next->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
+                break;
+        }
+		if (!fast->next || !fast->next->next)
+            return NULL;
+        ListNode* entry = &dummy;
+        while (entry != slow)
+        {
+            entry = entry->next;
+            slow = slow->next;
+        }
+        return entry;
+    }
+};
+
+3.
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    void Mirror(TreeNode *pRoot) {
+        if (!pRoot) return;
+        swap(pRoot->left, pRoot->right);
+        Mirror(pRoot->left);
+        Mirror(pRoot->right);
+    }
+};
+
+4.
+class Solution {
+public:
+    vector<vector<int> > Print(TreeNode* pRoot) {
+        //每一行从左到右或从右向左输出
+        vector<vector<int> > res;
+        if (!pRoot) return res;
+        bool l2r = true;
+        vector<vector<TreeNode> > resTree;
+        vector<TreeNode*> row;
+        row.push_back(pRoot);
+        while (!row.empty())
+        {
+            vector<int> row_int;
+            vector<TreeNode*> next_row;
+            for (auto node: row)
+            {
+                row_int.push_back(node->val);
+                if (node->left)
+                    next_row.push_back(node->left);
+                if (node->right)
+                    next_row.push_back(node->right);
+            }
+            row = next_row;
+            if (!l2r)
+                reverse(row_int.begin(),row_int.end());
+            res.push_back(row_int);
+            l2r = !l2r;
+        }
+        return res;
+    }
+};
