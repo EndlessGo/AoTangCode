@@ -134,3 +134,17 @@ public:
         return res;
     }
 };
+
+5.开始没想明白，就是一个斐波那契数列
+class Solution {
+public:
+    int rectCover(int number) {
+        if (number < 0)
+            return 0;
+        vector<int> dp(number+1, 0);//dp[i],i=0,1...,number, means all cover solutions number
+        dp[1] = 1; dp[2] = 2;
+        for (int i = 3; i <= number; ++i)
+            dp[i] = dp[i-1] + dp[i-2];
+        return dp[number];
+    }
+};
