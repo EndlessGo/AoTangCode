@@ -1,4 +1,4 @@
-7.15~7.22
+7.15~7.21
 1.     反转单链表
 https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=13&tqId=11168&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
  
@@ -146,5 +146,70 @@ public:
         for (int i = 3; i <= number; ++i)
             dp[i] = dp[i-1] + dp[i-2];
         return dp[number];
+    }
+};
+
+7.22-7.28
+1.数值的整数次方 https://www.nowcoder.com/practice/1a834e5e3e1a4b7ba251417554e07c00?tpId=13&tqId=11165&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+2.数据流中的中位数 https://www.nowcoder.com/practice/9be0172896bd43948f8a32fb954e1be1?tpId=13&tqId=11216&tPage=4&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+3.用非递归写法实现二叉树的中序遍历 https://leetcode.com/problems/binary-tree-inorder-traversal/
+4.课程表（拓扑排序） https://leetcode.com/problems/course-schedule/description/
+5.快速排序 https://leetcode.com/problems/sort-colors/
+6.https://leetcode.com/problems/subsets-ii/
+
+1.
+1.1 O(n)解法
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        bool non_negative = true;
+        if (exponent < 0)
+        {
+            exponent = -exponent;
+            non_negative = false;
+        }
+        double res = 1.0;
+        for (int i = 1; i <= exponent; ++i)
+            res *= base;
+        if (!non_negative)
+            res = 1.0/res;
+        return res;
+    }
+};
+
+1.2 C++ API
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        return pow(base,exponent);
+    }
+};
+
+1.3 二分法
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        bool non_negative = true;
+        if (exponent < 0)
+        {
+            exponent = -exponent;
+            non_negative = false;
+        }
+        double res = MyPow(base, exponent);
+        if (!non_negative)
+            res = 1.0/res;
+        return res;
+    }
+private:
+    double MyPow(double base, int exponent)
+    {
+        if (!exponent)
+            return 1.0;
+        if (exponent == 1)
+            return base;
+        double res = MyPow(base, exponent/2) * MyPow(base, exponent/2);
+        if (exponent % 2)
+            res *= base;
+        return res;
     }
 };
