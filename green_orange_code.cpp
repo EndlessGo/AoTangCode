@@ -213,3 +213,77 @@ private:
         return res;
     }
 };
+
+2. 有点意思，可深入！
+class Solution {
+public:
+    void Insert(int num)
+    {
+        if (p.empty() || num <= p.top())
+            p.push(num);
+        else
+            q.push(num);
+
+        if (p.size() == q.size() + 2)//总数据个数为偶数时，保持左右数组大小相等
+        {
+            q.push(p.top());
+            p.pop();
+        }
+        if (q.size() == p.size() + 1)//总数据个数为奇数时，保持左侧数组比右侧数组多一个元素
+        {
+            p.push(q.top());
+            q.pop();
+        }
+        return;
+    }
+
+    double GetMedian()
+    {
+        return p.size() == q.size() ? (p.top()+q.top())/2.0 : p.top();
+    }
+private:
+    priority_queue<int, vector<int>, less<int>> p;//大根堆，排序后数组左半侧，包含奇数时的中间元素
+    priority_queue<int, vector<int>, greater<int>> q;//大根堆，排序后数组右半侧，不包含奇数时的中间元素
+};
+
+5. 三路快排
+5.1
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        //left means left part contains 0, [0,left)
+        //right means right part that contains 2, (right,size-1]
+        int size = nums.size();
+        int left = 0, right = size-1, index = 0;
+        while (index <= right)
+        {
+            if (nums[index] < 1)
+                swap(nums[left++], nums[index++]);
+            else if (nums[index] > 1)
+                swap(nums[right--], nums[index]);
+            else//nums[index] == 1
+                ++index;
+        }
+        return;
+    }
+};
+
+5.2
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        //[0,zero]存0,[zero+1,i-1]存1，i为待访问的元素，[two,n-1]存2
+        int zero = -1, i = 0;
+        int two = nums.size();
+        for(int i = 0; i < two; )
+        while (i < two)
+        {
+            if(nums[i] == 1)
+                i++;
+            else if (nums[i] == 0)
+                swap(nums[++zero],nums[i++]);
+            else
+                swap(nums[--two],nums[i]);
+        }
+    }
+};
