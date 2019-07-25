@@ -246,6 +246,93 @@ private:
     priority_queue<int, vector<int>, greater<int>> q;//大根堆，排序后数组右半侧，不包含奇数时的中间元素
 };
 
+4.
+4.1 DFS
+class Solution {
+public:
+    typedef vector<vector<int>> graph;
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g = buildGraph(numCourses, prerequisites);
+        vector<bool> visited(numCourses, false), finished(numCourses, false);
+        for (int i = 0; i < numCourses; ++i)
+        {
+            if (!finished[i] && hasCycle(g, visited, finished, i))
+                return false;
+        }
+        return true;
+    }
+private:
+    graph buildGraph(int numCourses, vector<vector<int>>& prerequisites)
+    {
+        graph g(numCourses);
+        for (int i = 0; i < prerequisites.size(); ++i)
+        {
+            g[prerequisites[i][1]].push_back(prerequisites[i][0]);//[u,v] v is prerequisite of u, push into g[v]
+        }
+        return g;
+    }
+    bool hasCycle(graph &g, vector<bool>& visited, vector<bool>& finished, int node)
+    {
+        if (visited[node])
+            return true;
+        if (finished[node])
+            return false;
+        visited[node] = finished[node] = true;
+        for (auto after: g[node])
+        {
+            if (hasCycle(g, visited, finished, after))
+                return true;
+        }
+        visited[node] = false;
+        return false;
+    }
+};
+
+4.2 BFS 有点意思，找到一个入度为0的就将其删除表示可以完成该课程及后续课程
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g = buildGraph(numCourses, prerequisites);
+        vector<int> degrees = computeIndegrees(g);
+        for (int i = 0; i < numCourses; i++) {
+            int j = 0;
+            for (; j < numCourses; j++) {
+                if (!degrees[j]) {
+                    break;
+                }
+            }
+            if (j == numCourses) {
+                return false;
+            }
+            degrees[j]--;
+            for (int v : g[j]) {
+                degrees[v]--;
+            }
+        }
+        return true;
+    }
+private:
+    typedef vector<vector<int>> graph;
+
+    graph buildGraph(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g(numCourses);
+        for (auto p : prerequisites) {
+            g[p[1]].push_back(p[0]);
+        }
+        return g;
+    }
+
+    vector<int> computeIndegrees(graph& g) {
+        vector<int> degrees(g.size(), 0);
+        for (auto adj : g) {
+            for (int v : adj) {
+                degrees[v]++;
+            }
+        }
+        return degrees;
+    }
+};
+
 5. 三路快排
 5.1
 class Solution {
