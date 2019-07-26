@@ -246,6 +246,57 @@ private:
     priority_queue<int, vector<int>, greater<int>> q;//大根堆，排序后数组右半侧，不包含奇数时的中间元素
 };
 
+3. 用栈模拟递归
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    enum Action
+    {
+        PUSH,//入栈的是树结点，待中序访问左右子树
+        OUT,//入栈的是树结点，待输出树结点的值
+    };
+    struct StackNode
+    {
+        Action act;
+        TreeNode* treeNode;
+        StackNode(Action act_, TreeNode* node_): act(act_), treeNode(node_) {}
+    };
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> inorderVec;
+        if (!root) return inorderVec;
+        stk.push(StackNode(PUSH, root));
+        while (!stk.empty())
+        {
+            StackNode stkNode = stk.top();
+            stk.pop();
+            if (stkNode.act == PUSH)
+            {
+                if (stkNode.treeNode->right)
+                    stk.push(StackNode(PUSH, stkNode.treeNode->right));
+                stk.push(StackNode(OUT, stkNode.treeNode->right));
+                if (stkNode.treeNode->left)
+                    stk.push(StackNode(PUSH, stkNode.treeNode->left));
+            }
+            else if (stkNode.act == OUT)
+                inorderVec.push_back(stkNode.treeNode->val);
+            else
+                assert(false);
+        }
+        return inorderVec;
+    }
+private:
+    stack<StackNode> stk;
+};
+
 4.
 4.1 DFS
 class Solution {
