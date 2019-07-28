@@ -1,3 +1,65 @@
+# 题目摘要
+## 2019.6.9-2019.6.15
+### Range in leetcode 145 Top Interview Questions
+easy:
+1. https://leetcode.com/problems/two-sum/
+2. https://leetcode.com/problems/power-of-three/
+
+medium:
+1. https://leetcode.com/problems/add-two-numbers/
+2. https://leetcode.com/problems/3sum/                 
+3. https://leetcode.com/problems/jump-game/           
+4. https://leetcode.com/problems/word-break/          
+5. https://leetcode.com/problems/sort-list/             
+
+hard:
+1. https://leetcode.com/problems/median-of-two-sorted-arrays/  
+2. https://leetcode.com/problems/first-missing-positive/        
+3. https://leetcode.com/problems/trapping-rain-water/           
+
+## 2019.6.17-2019.6.23
+### Tree专题
+MEDIUM
+https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
+https://leetcode.com/problems/path-sum/
+https://leetcode.com/problems/path-sum-ii/                                      
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/        
+HARD
+https://leetcode.com/problems/recover-binary-search-tree/
+### 动态规划专题
+easy:
+1. https://leetcode.com/problems/climbing-stairs/
+medium:
+1. https://leetcode.com/problems/unique-paths/
+2. https://leetcode.com/problems/longest-palindromic-substring/        
+### 二进制专题
+easy:
+1. www.lintcode.com/zh-cn/problem/count-1-in-binary
+2. www.lintcode.com/zh-cn/problem/add-binary
+
+# 题目摘要
+## 2019.6.24-2019.6.30
+###链表专题
+easy:
+1. https://leetcode.com/problems/linked-list-cycle/
+medium:
+1. https://leetcode.com/problems/linked-list-cycle-ii/
+2. https://leetcode.com/problems/rotate-list/
+
+###二分查找
+medium:
+1. https://leetcode.com/problems/search-in-rotated-sorted-array/
+2. https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+3. https://leetcode.com/problems/search-a-2d-matrix/
+
+###搜索专题
+medium:
+1. https://leetcode.com/problems/pacific-atlantic-water-flow/          
+2. https://leetcode.com/problems/decode-string/                         
+hard:
+1. https://leetcode.com/problems/24-game/                               
+2. https://leetcode.com/problems/recover-binary-search-tree/
+
 # 题目摘要  
 ## 2019.6.9-2019.6.15  
 ### Range in leetcode 145 Top Interview Questions  

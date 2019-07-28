@@ -21,6 +21,7 @@ https://www.nowcoder.com/practice/72a5a919508a4251859fb2cfb987a0e6?tpId=13&tqId=
 @黄环-研二-信息与通信工程 @李宗凯 
 
 1.
+1.1 迭代做法
 /*
 struct ListNode {
 	int val;
@@ -42,6 +43,40 @@ public:
             cur = next;
         }
         return pre;
+    }
+};
+1.2 递归做法
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head)  return NULL;
+        ListNode *newHead = NULL;
+        ListNode* newTail = Recursive(head, newHead);
+        newTail->next = NULL;
+        return newHead;
+    }
+private:
+    ListNode* Recursive(ListNode* node, ListNode* &newHead) {//反转以node为头的单链表，返回反转后的尾节点
+        if (!node)  return NULL;
+        cout<<"node->val="<<node->val<<endl;
+        if (!node->next)//尾部返回新头节点
+            newHead = node;
+
+        ListNode* tail = Recursive(node->next, newHead);
+        if(tail)
+        {
+            tail->next = node;
+            cout<<"tail->val="<<tail->val<<endl;
+        }
+        return node;
     }
 };
 
