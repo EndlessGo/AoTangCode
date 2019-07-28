@@ -1,4 +1,4 @@
-7.15~7.22
+7.15~7.21
 1.     反转单链表
 https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=13&tqId=11168&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
  
@@ -181,5 +181,282 @@ public:
         for (int i = 3; i <= number; ++i)
             dp[i] = dp[i-1] + dp[i-2];
         return dp[number];
+    }
+};
+
+7.22-7.28
+1.数值的整数次方 https://www.nowcoder.com/practice/1a834e5e3e1a4b7ba251417554e07c00?tpId=13&tqId=11165&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+2.数据流中的中位数 https://www.nowcoder.com/practice/9be0172896bd43948f8a32fb954e1be1?tpId=13&tqId=11216&tPage=4&rp=4&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+3.用非递归写法实现二叉树的中序遍历 https://leetcode.com/problems/binary-tree-inorder-traversal/
+4.课程表（拓扑排序） https://leetcode.com/problems/course-schedule/description/
+5.快速排序 https://leetcode.com/problems/sort-colors/
+6.https://leetcode.com/problems/subsets-ii/
+
+1.
+1.1 O(n)解法
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        bool non_negative = true;
+        if (exponent < 0)
+        {
+            exponent = -exponent;
+            non_negative = false;
+        }
+        double res = 1.0;
+        for (int i = 1; i <= exponent; ++i)
+            res *= base;
+        if (!non_negative)
+            res = 1.0/res;
+        return res;
+    }
+};
+
+1.2 C++ API
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        return pow(base,exponent);
+    }
+};
+
+1.3 二分法
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        bool non_negative = true;
+        if (exponent < 0)
+        {
+            exponent = -exponent;
+            non_negative = false;
+        }
+        double res = MyPow(base, exponent);
+        if (!non_negative)
+            res = 1.0/res;
+        return res;
+    }
+private:
+    double MyPow(double base, int exponent)
+    {
+        if (!exponent)
+            return 1.0;
+        if (exponent == 1)
+            return base;
+        double res = MyPow(base, exponent/2) * MyPow(base, exponent/2);
+        if (exponent % 2)
+            res *= base;
+        return res;
+    }
+};
+
+2. 有点意思，可深入！
+class Solution {
+public:
+    void Insert(int num)
+    {
+        if (p.empty() || num <= p.top())
+            p.push(num);
+        else
+            q.push(num);
+
+        if (p.size() == q.size() + 2)//总数据个数为偶数时，保持左右数组大小相等
+        {
+            q.push(p.top());
+            p.pop();
+        }
+        if (q.size() == p.size() + 1)//总数据个数为奇数时，保持左侧数组比右侧数组多一个元素
+        {
+            p.push(q.top());
+            q.pop();
+        }
+        return;
+    }
+
+    double GetMedian()
+    {
+        return p.size() == q.size() ? (p.top()+q.top())/2.0 : p.top();
+    }
+private:
+    priority_queue<int, vector<int>, less<int>> p;//大根堆，排序后数组左半侧，包含奇数时的中间元素
+    priority_queue<int, vector<int>, greater<int>> q;//大根堆，排序后数组右半侧，不包含奇数时的中间元素
+};
+
+3. 用栈模拟递归
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    enum Action
+    {
+        PUSH,//入栈的是树结点，待中序访问左右子树
+        OUT,//入栈的是树结点，待输出树结点的值
+    };
+    struct StackNode
+    {
+        Action act;
+        TreeNode* treeNode;
+        StackNode(Action act_, TreeNode* node_): act(act_), treeNode(node_) {}
+    };
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> inorderVec;
+        if (!root) return inorderVec;
+        stk.push(StackNode(PUSH, root));
+        while (!stk.empty())
+        {
+            StackNode stkNode = stk.top();
+            stk.pop();
+            if (stkNode.act == PUSH)
+            {
+                if (stkNode.treeNode->right)
+                    stk.push(StackNode(PUSH, stkNode.treeNode->right));
+                stk.push(StackNode(OUT, stkNode.treeNode->right));
+                if (stkNode.treeNode->left)
+                    stk.push(StackNode(PUSH, stkNode.treeNode->left));
+            }
+            else if (stkNode.act == OUT)
+                inorderVec.push_back(stkNode.treeNode->val);
+            else
+                assert(false);
+        }
+        return inorderVec;
+    }
+private:
+    stack<StackNode> stk;
+};
+
+4.
+4.1 DFS
+class Solution {
+public:
+    typedef vector<vector<int>> graph;
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g = buildGraph(numCourses, prerequisites);
+        vector<bool> visited(numCourses, false), finished(numCourses, false);
+        for (int i = 0; i < numCourses; ++i)
+        {
+            if (!finished[i] && hasCycle(g, visited, finished, i))
+                return false;
+        }
+        return true;
+    }
+private:
+    graph buildGraph(int numCourses, vector<vector<int>>& prerequisites)
+    {
+        graph g(numCourses);
+        for (int i = 0; i < prerequisites.size(); ++i)
+        {
+            g[prerequisites[i][1]].push_back(prerequisites[i][0]);//[u,v] v is prerequisite of u, push into g[v]
+        }
+        return g;
+    }
+    bool hasCycle(graph &g, vector<bool>& visited, vector<bool>& finished, int node)
+    {
+        if (visited[node])
+            return true;
+        if (finished[node])
+            return false;
+        visited[node] = finished[node] = true;
+        for (auto after: g[node])
+        {
+            if (hasCycle(g, visited, finished, after))
+                return true;
+        }
+        visited[node] = false;
+        return false;
+    }
+};
+
+4.2 BFS 有点意思，找到一个入度为0的就将其删除表示可以完成该课程及后续课程
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g = buildGraph(numCourses, prerequisites);
+        vector<int> degrees = computeIndegrees(g);
+        for (int i = 0; i < numCourses; i++) {
+            int j = 0;
+            for (; j < numCourses; j++) {
+                if (!degrees[j]) {
+                    break;
+                }
+            }
+            if (j == numCourses) {
+                return false;
+            }
+            degrees[j]--;
+            for (int v : g[j]) {
+                degrees[v]--;
+            }
+        }
+        return true;
+    }
+private:
+    typedef vector<vector<int>> graph;
+
+    graph buildGraph(int numCourses, vector<vector<int>>& prerequisites) {
+        graph g(numCourses);
+        for (auto p : prerequisites) {
+            g[p[1]].push_back(p[0]);
+        }
+        return g;
+    }
+
+    vector<int> computeIndegrees(graph& g) {
+        vector<int> degrees(g.size(), 0);
+        for (auto adj : g) {
+            for (int v : adj) {
+                degrees[v]++;
+            }
+        }
+        return degrees;
+    }
+};
+
+5. 三路快排
+5.1
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        //left means left part contains 0, [0,left)
+        //right means right part that contains 2, (right,size-1]
+        int size = nums.size();
+        int left = 0, right = size-1, index = 0;
+        while (index <= right)
+        {
+            if (nums[index] < 1)
+                swap(nums[left++], nums[index++]);
+            else if (nums[index] > 1)
+                swap(nums[right--], nums[index]);
+            else//nums[index] == 1
+                ++index;
+        }
+        return;
+    }
+};
+
+5.2
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        //[0,zero]存0,[zero+1,i-1]存1，i为待访问的元素，[two,n-1]存2
+        int zero = -1, i = 0;
+        int two = nums.size();
+        for(int i = 0; i < two; )
+        while (i < two)
+        {
+            if(nums[i] == 1)
+                i++;
+            else if (nums[i] == 0)
+                swap(nums[++zero],nums[i++]);
+            else
+                swap(nums[--two],nums[i]);
+        }
     }
 };
